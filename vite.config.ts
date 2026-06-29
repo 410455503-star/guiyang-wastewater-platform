@@ -2,7 +2,6 @@ import react from '@vitejs/plugin-react'
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { traeBadgePlugin } from 'vite-plugin-trae-solo-badge';
 import { defineConfig } from 'vite'
-
 // https://vite.dev/config/
 export default defineConfig({
   // 关键修改：固定为仓库全名，首尾斜杠不能省略
