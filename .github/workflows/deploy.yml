@@ -1,28 +1,42 @@
-name: Build and Deploy GitHub Pages
+name: Build & Deploy GitHub Pages
 on:
   push:
-    branches: [ main ] # 监听main分支提交
+    branches: [ main ]
+# 权限完整配置，解决git 128权限问题
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Setup Node.js
+        with:
+          fetch-depth: 0 # 完整拉取代码，规避git拉取异常128
+      - name: Setup Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24 # 适配当前强制Node24环境，消除警告
           cache: 'npm'
-
       - name: Install dependencies
-        run: npm install
-
-      - name: Build project
+        run: npm ci # 比npm install更稳定，锁定lock版本
+      - name: Build Vite Project
         run: npm run build
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload build artifacts
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
