@@ -1,11 +1,12 @@
 import react from '@vitejs/plugin-react'
-import tsconfigPaths from "vite-tsconfig-paths";
+import tsconfigPaths from 'vite-tsconfig-paths';
 import { traeBadgePlugin } from 'vite-plugin-trae-solo-badge';
-import { defineConfig } from 'vite' // 必须引入defineConfig！你之前缺失这一行
+import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: './',
+  // 关键修改：固定为仓库全名，首尾斜杠不能省略
+  base: '/guiyang-wastewater-platform/',
   plugins: [
     react({
       babel: {
@@ -34,15 +35,9 @@ export default defineConfig({
         configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {
             console.log('proxy error', err);
-          });
-          proxy.on('proxyReq', (proxyReq, req, _res) => {
-            console.log('Sending Request to the Target:', req.method, req.url);
-          });
-          proxy.on('proxyRes', (proxyRes, req, _res) => {
-            console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
-          });
-        },
-      },
-    },
+          })
+        }
+      }
+    }
   }
 })
