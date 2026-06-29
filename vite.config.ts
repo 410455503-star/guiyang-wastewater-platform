@@ -4,7 +4,7 @@ import { traeBadgePlugin } from 'vite-plugin-trae-solo-badge';
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: './', // 新增这一行，放在最开头
+  base: './',
   plugins: [
     react({
       babel: {
