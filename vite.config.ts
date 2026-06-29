@@ -1,6 +1,7 @@
 import react from '@vitejs/plugin-react'
 import tsconfigPaths from "vite-tsconfig-paths";
 import { traeBadgePlugin } from 'vite-plugin-trae-solo-badge';
+import { defineConfig } from 'vite' // 必须引入defineConfig！你之前缺失这一行
 
 // https://vite.dev/config/
 export default defineConfig({
